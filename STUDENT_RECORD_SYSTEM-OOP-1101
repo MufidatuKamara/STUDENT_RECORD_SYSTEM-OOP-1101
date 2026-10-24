@@ -1,0 +1,137 @@
+# Student Record Management System
+
+
+# Creating the Student class
+class Student:
+    total_students = 0
+
+    def __init__(self, student_id, name, age, course):
+        self.student_id = student_id
+        self.name = name
+        self.age = age
+        self.course = course
+        Student.total_students += 1
+
+    # Method to display student information
+    def display_info(self):
+        print("Student ID:", self.student_id)
+        print("Name:", self.name)
+        print("Age:", self.age)
+        print("Course:", self.course)
+
+    # Method to update student information
+    def update_info(self, name, age, course):
+        self.name = name
+        self.age = age
+        self.course = course
+        print("Student record updated successfully.")
+
+    # Class method to count student objects
+    @classmethod
+    def count_students(cls):
+        return cls.total_students
+
+
+# Creating the StudentRecordSystem class
+class StudentRecordSystem:
+
+    def __init__(self):
+        self.students = []
+
+    # Method to add a student
+    def add_student(self, student):
+        self.students.append(student)
+        print("Student added successfully.")
+
+    # Method to display all students
+    def display_students(self):
+        if len(self.students) == 0:
+            print("No student records available.")
+        else:
+            for student in self.students:
+                print("\nStudent Details")
+                student.display_info()
+
+    # Method to search for a student
+    def search_student(self, student_id):
+        for student in self.students:
+            if student.student_id == student_id:
+                return student
+        return None
+
+
+# Creating the main program
+system = StudentRecordSystem()
+
+while True:
+    print("\nSTUDENT RECORD MANAGEMENT SYSTEM")
+    print("1. Add Student")
+    print("2. Display Students")
+    print("3. Search Student")
+    print("4. Update Student")
+    print("5. Count Students")
+    print("6. Exit")
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        student_id = input("Enter student ID: ")
+
+        # Check if the student ID already exists
+        if system.search_student(student_id) is not None:
+            print("Student ID already exists.")
+            continue
+
+        name = input("Enter student name: ")
+
+        try:
+            age = int(input("Enter student age: "))
+        except ValueError:
+            print("Please enter a valid age.")
+            continue
+
+        course = input("Enter course: ")
+
+        student = Student(student_id, name, age, course)
+        system.add_student(student)
+
+    elif choice == "2":
+        system.display_students()
+
+    elif choice == "3":
+        student_id = input("Enter student ID to search: ")
+        student = system.search_student(student_id)
+
+        if student is not None:
+            student.display_info()
+        else:
+            print("Student not found.")
+
+    elif choice == "4":
+        student_id = input("Enter student ID to update: ")
+        student = system.search_student(student_id)
+
+        if student is not None:
+            name = input("Enter new name: ")
+
+            try:
+                age = int(input("Enter new age: "))
+            except ValueError:
+                print("Please enter a valid age.")
+                continue
+
+            course = input("Enter new course: ")
+            student.update_info(name, age, course)
+        else:
+            print("Student not found.")
+
+    elif choice == "5":
+        print("Total student objects created:",
+              Student.count_students())
+
+    elif choice == "6":
+        print("Thank you for using the system.")
+        break
+
+    else:
+        print("Invalid choice. Please try again.")
